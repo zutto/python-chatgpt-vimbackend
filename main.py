@@ -74,6 +74,7 @@ def exit_handler(signum, frame):
     if convo is not None:
         asyncio.run(bot.delete_conversation(convo))
     print("done")
+    sys.exit()
 
 signal.signal(signal.SIGTERM, exit_handler)
 
@@ -88,7 +89,9 @@ while True:
         if convo is not None:
             asyncio.run(bot.delete_conversation(convo))
         print("done")
+        sys.exit()
         break
+
     # Exit gracefully if the user hits Ctrl+C
     except json.JSONDecodeError:
         continue
@@ -103,5 +106,6 @@ while True:
         role = systemrole
     else:
         convo=asyncio.run(query(f"{text}", bot, encoder, convo=convo))
+    time.sleep(0.01)
 
 
