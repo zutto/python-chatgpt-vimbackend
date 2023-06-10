@@ -10,6 +10,8 @@ import signal
 
 UUID = str(uuid.uuid4())
 convo = None
+
+role = ""
 bot = AsyncChatbot(config={
         "access_token": os.environ.get("CHATGPT_API_KEY"),
         "paid": True
@@ -94,7 +96,12 @@ while True:
     if data is None:
         continue
     systemrole = data["role"]
-        # Do something with the values (replace this with your own code)
     text = data["text"]
-    convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convo))
+
+    if role != systemrole:
+        convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convo))
+        role = systemrole
+    else:
+        convo=asyncio.run(query(f"{text}", bot, encoder, convo=convo))
+
 
