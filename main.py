@@ -53,10 +53,10 @@ class JSONOutputWriter:
 
 
 
-async def query(msg, bot, encoder, convo=None):
+async def query(msg, bot, encoder, convo=None, model: str = ""):
     
     existing=""
-    async for message in bot.ask(msg):
+    async for message in bot.ask(msg, model=model):
         if convo is None and 'conversation_id' in message:
             convo = message['conversation_id']
         encoder.write_json({'eof':False, 'error':'', 'text': message["message"][len(existing):]})
@@ -96,16 +96,20 @@ while True:
     except json.JSONDecodeError:
         continue
 
+    model = ""
     if data is None:
         continue
-    systemrole = data["role"]
+    systemrole = ""
+    if 'role' in data:
+        systemrole = data["role"]
     text = data["text"]
-
+    if 'model' in data:
+        model = data["model"]
     if role != systemrole:
-        convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convo))
+        convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convoi, model=model))
         role = systemrole
     else:
-        convo=asyncio.run(query(f"{text}", bot, encoder, convo=convo))
+        convo=asyncio.run(query(f"{text}", bot, encoder, convo=convo, model=model))
     time.sleep(0.01)
 
 
