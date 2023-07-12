@@ -113,7 +113,7 @@ while True:
     if 'model' in data:
         model = data["model"]
     if role != systemrole:
-        convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convoi, model=model))
+        convo=asyncio.run(query(f"{systemrole}\n{text}", bot, encoder, convo=convo, model=model))
         role = systemrole
     else:
         convo=asyncio.run(query(f"{text}", bot, encoder, convo=convo, model=model))
