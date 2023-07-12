@@ -1,21 +1,33 @@
-#!/opt/homebrew/bin/python3.11
+#!/usr/bin/python3.11
 import json
 import sys
 import os
 from revChatGPT.V1 import AsyncChatbot
-import uuid
 import asyncio
 import time
 import signal 
 
-UUID = str(uuid.uuid4())
 convo = None
 
 role = ""
-bot = AsyncChatbot(config={
-        "access_token": os.environ.get("CHATGPT_API_KEY"),
-        "paid": True
-        },
+config = {
+        "email": os.getenv("OPENAI_USER", None),
+        "password":  os.getenv("OPENAI_PASSWORD", None),
+        "access_token": os.getenv("CHATGPT_API_KEY", None),
+}
+
+
+
+if not os.environ.get("CHATGPT_API_KEY") or len(os.environ.get("CHATGPT_API_KEY")) < 1:
+    config.pop("access_token")
+if not os.environ.get("OPENAI_USER") or not os.environ.get("OPENAI_PASSWORD"):
+    config.pop("email")
+    config.pop("password")
+
+if os.environ.get("OPENAI_PAID"):
+    config["paid"] = True
+
+bot = AsyncChatbot(config = config,
         conversation_id=convo or None,
         base_url=os.environ.get("CHATGPT_BASE_URL")
 )
@@ -46,7 +58,6 @@ class JSONOutputWriter:
 
     def write_json(self, data):
         if len(data) > 1:
-            #self.file.write(self.encoder.encode(data)) #still dont understand why this doesnt work with vim
             print(self.encoder.encode(data))
             self.file.flush()
 
@@ -80,10 +91,7 @@ signal.signal(signal.SIGTERM, exit_handler)
 
 while True:
     try:
-        # Read in the JSON input from stdin
-        # Parse the JSON
         data = decoder.read_json()
-        # Access the "Text" and "Systemrole" values
     except KeyboardInterrupt:
         print("deleting conversation")        
         if convo is not None:
@@ -92,7 +100,6 @@ while True:
         sys.exit()
         break
 
-    # Exit gracefully if the user hits Ctrl+C
     except json.JSONDecodeError:
         continue
 
