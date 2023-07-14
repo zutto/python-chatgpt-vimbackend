@@ -20,6 +20,21 @@ copy files to $PATH:
 sudo make
 ```
 
+Add variables to $env - examples below.
+```
+# Username and password are optional, but you must use api key without them.
+OPENAI_USER=<EMAIL>
+OPENAI_PASSWORD=
+
+#OPENAI api key
+CHATGPT_API_KEY=
+
+#paid flag for chatgpt
+OPENAI_PAID=<any value = true, omit = false>
+
+#base url for your openai or similar compatible service - see localai for example.
+CHATGPT_BASE_URL=http://localhost:8080/
+```
 
 Example use on chatgpt generated code to tidy it:
 [![asciicast](https://asciinema.org/a/Bn4VZP9qp2s2BerHj3TUmkiFE.svg)](https://asciinema.org/a/Bn4VZP9qp2s2BerHj3TUmkiFE)
