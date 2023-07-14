@@ -7,5 +7,7 @@ you can try this manually by running:
 cat test.json | ./main.py
 ```
 
-
+Example use on chatgpt generated code to tidy it:
+[![asciicast](https://asciinema.org/a/Bn4VZP9qp2s2BerHj3TUmkiFE.svg)](https://asciinema.org/a/Bn4VZP9qp2s2BerHj3TUmkiFE)
+[![asciicast](https://asciinema.org/a/596676.svg)](https://asciinema.org/a/596676)
 At exit, this will also clean up the conversation.
