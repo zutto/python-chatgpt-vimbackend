@@ -16,7 +16,8 @@ class JSONInputReader:
             if line:
                 return self.decoder.decode(line)
         except json.JSONDecodeError:
-            print("decode error")
+            
+            print(f"decode error\n{line}")
             pass
         except Exception as e:
             print(e)
@@ -32,7 +33,7 @@ class JSONOutputWriter:
         if len(data) > 1:
             json_data = {
                 "role": os.getenv("OPENAI_TERM_ROLE", "You are a expert of all terminal emulators. You always great good commands and tips for the user while keeping output to minimum."),
-                "model": "",
+                "model": "gpt3.5",
                 "text": data,
                 "session": "bash"
             }
@@ -57,7 +58,7 @@ writer = JSONOutputWriter(chatgpt_process.stdin)
 def exit_handler(signum=None, frame=None):
     chatgpt_process.send_signal(signal.SIGTERM)
     chatgpt_process.wait()
-    sys.Exit()
+    sys.exit()
 
 
 
